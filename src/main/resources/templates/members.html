@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Members List</title>
+    <link rel="stylesheet" th:href="@{/css/members.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Members List</h1>
+
+    <div class="actions">
+        <a href="/members/create" class="button">Add Member</a>
+    </div>
+
+    <!-- Search Form -->
+    <form method="get" action="/members" class="search-form">
+        <input type="text" name="name" placeholder="Search by Name" class="search-input">
+        <input type="date" name="joiningDate" placeholder="Search by Joining Date" class="search-input">
+        <input type="text" name="contact" placeholder="Search by Contact" class="search-input">
+        <input type="submit" value="Search" class="search-button">
+    </form>
+
+    <table class="members-table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Plan Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Joining Date</th>
+            <th>Status</th>
+            <th>Amount (Rs)</th>
+            <th>Payment Status</th>
+            <th>Actions</th> <!-- Added Actions column -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td>
+                <a th:href="@{'/members/' + ${member.id} + '/profile'}" th:text="${member.name}"></a>
+            </td>
+            <td th:text="${member.contact}"></td>
+            <td th:text="${member.address}"></td>
+            <td th:text="${member.planType}"></td>
+            <td th:text="${member.startDate}"></td>
+            <td th:text="${member.endDate}"></td>
+            <td th:text="${member.joiningDate}"></td>
+            <td th:text="${member.status}"></td>
+            <td th:text="${member.amount}"></td>
+            <td>
+                <a th:href="@{'/payments/member/' + ${member.id}}">
+                    <span th:if="${member.paymentStatus == 'Paid'}" style="color: green;">Paid</span>
+                    <span th:if="${member.paymentStatus == 'Not Paid'}" style="color: red;">
+                        Not Paid
+                        <span class="warning-sign">&#9888;</span>
+                    </span>
+                </a>
+            </td>
+            <td>
+                <form th:action="@{'/members/delete/' + ${member.id}}" method="post">
+                    <button type="submit" class="button button-delete">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

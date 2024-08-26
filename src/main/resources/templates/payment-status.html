@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment Status</title>
+    <link rel="stylesheet" th:href="@{/css/payment-status.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Payment Status for <span th:text="${member.name}"></span></h1>
+
+    <table class="payment-table">
+        <thead>
+        <tr>
+            <th>Payment Date</th>
+            <th>Due Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="payment : ${payments}">
+            <td th:text="${payment.paymentDate}"></td>
+            <td th:text="${payment.dueDate}"></td>
+            <td th:text="${payment.amount}"></td>
+            <td th:if="${payment.status == 'Paid'}" style="color: green;" th:text="${payment.status}"></td>
+            <td th:if="${payment.status == 'Not Paid'}" style="color: red;">
+                <span th:text="${payment.status}"></span>
+                <span style="color: orange;">&#9888;</span>
+            </td>
+            <td>
+                <form th:action="@{'/payments/updateStatus/' + ${payment.id}}" method="post">
+                    <button type="submit" class="button">Mark as Paid</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="actions">
+        <a href="/members" class="button">Back to Members List</a>
+    </div>
+</div>
+</body>
+</html>
